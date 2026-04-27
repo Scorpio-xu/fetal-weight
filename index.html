@@ -1,185 +1,559 @@
-
-<h2 class="sr-only">胎儿体重估算完整报告，含公式说明、折线图、实测与预测数据表格</h2>
-
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小满的生长档案</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-table { width:100%; border-collapse:collapse; font-size:13px; }
-th { font-weight:500; color:var(--color-text-secondary); padding:8px 12px; text-align:left; border-bottom:0.5px solid var(--color-border-tertiary); }
-td { padding:8px 12px; border-bottom:0.5px solid var(--color-border-tertiary); color:var(--color-text-primary); }
-tr:last-child td { border-bottom:none; }
-.card { background:var(--color-background-primary); border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:1rem 1.25rem; margin-bottom:12px; }
-.section-title { font-size:13px; font-weight:500; color:var(--color-text-secondary); margin:0 0 10px; }
-.badge { display:inline-block; font-size:11px; padding:2px 8px; border-radius:var(--border-radius-md); font-weight:500; }
-.badge-blue { background:var(--color-background-info); color:var(--color-text-info); }
-.badge-coral { background:#FAECE7; color:#993C1D; }
-.formula-box { background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:10px 14px; font-family:var(--font-mono); font-size:12px; line-height:2; }
-.dot { display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:5px; vertical-align:middle; }
-.legend-item { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--color-text-secondary); }
-</style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<div class="card">
-  <p class="section-title">公式说明</p>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-    <div>
-      <div style="font-size:12px;font-weight:500;margin-bottom:6px;"><span class="dot" style="background:#378ADD;"></span>Hadlock II（1985）</div>
-      <div class="formula-box">
+  :root {
+    --sage:       #7a9e87;
+    --sage-light: #b8d4c0;
+    --sage-pale:  #eaf2ed;
+    --blush:      #e8b4a0;
+    --blush-pale: #fdf0eb;
+    --ink:        #2d2d2a;
+    --ink-muted:  #6b6b65;
+    --ink-faint:  #a8a89f;
+    --cream:      #faf8f3;
+    --white:      #ffffff;
+    --border:     rgba(45,45,42,0.08);
+    --radius:     16px;
+    --radius-sm:  8px;
+  }
+
+  html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+
+  body {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-weight: 300;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 20px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, var(--sage-pale) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, var(--blush-pale) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-icon {
+    font-size: 36px;
+    margin-bottom: 8px;
+    display: block;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-5px); }
+  }
+  .header h1 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(22px, 6vw, 28px);
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.04em;
+  }
+  .header-sub {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--ink-muted);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── Layout ── */
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 20px 16px 0;
+  }
+
+  /* ── Section title ── */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 20px; height: 1px;
+    background: var(--sage-light);
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin-bottom: 14px;
+    animation: fadeUp 0.4s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(12px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+  .card:nth-child(2) { animation-delay: 0.05s; }
+  .card:nth-child(3) { animation-delay: 0.10s; }
+  .card:nth-child(4) { animation-delay: 0.15s; }
+
+  /* ── Formula cards ── */
+  .formula-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  @media (max-width: 480px) {
+    .formula-grid { grid-template-columns: 1fr; }
+  }
+  .formula-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 18px;
+    animation: fadeUp 0.4s ease both;
+  }
+  .formula-card.hadlock { border-top: 3px solid var(--sage); }
+  .formula-card.clinical { border-top: 3px solid var(--blush); }
+
+  .formula-name {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .dot-sage  { width:8px; height:8px; border-radius:2px; background:var(--sage); flex-shrink:0; }
+  .dot-blush { width:8px; height:8px; border-radius:2px; background:var(--blush); flex-shrink:0; }
+
+  .formula-body {
+    font-family: 'DM Mono', monospace;
+    font-size: 11.5px;
+    line-height: 1.9;
+    color: var(--ink);
+    background: var(--cream);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+  }
+  .formula-note {
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--ink-faint);
+    line-height: 1.6;
+  }
+
+  /* ── Table ── */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  thead th {
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+    padding: 0 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  tbody td {
+    padding: 11px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--ink);
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: var(--cream); }
+  tr.excluded td { color: var(--ink-faint); }
+  tr.excluded .efw-val { text-decoration: line-through; }
+  .excluded-badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: #fff3cd;
+    color: #856404;
+    margin-left: 4px;
+    vertical-align: middle;
+    font-weight: 500;
+  }
+  .badge-sage {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--sage-pale);
+    color: var(--sage);
+    font-weight: 500;
+  }
+  .badge-blush {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--blush-pale);
+    color: #c47a60;
+    font-weight: 500;
+  }
+  .table-note {
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+
+  /* ── Regression pill ── */
+  .regression-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 400px) { .regression-grid { grid-template-columns: 1fr; } }
+  .regression-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: var(--cream);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    line-height: 1.8;
+    color: var(--ink-muted);
+  }
+
+  /* ── Chart ── */
+  .chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--ink-muted);
+  }
+  .legend-line {
+    width: 20px; height: 2px;
+    border-radius: 1px;
+  }
+  .legend-dashed {
+    width: 20px; height: 0;
+    border-top: 2px dashed;
+  }
+  .legend-tri {
+    width: 0; height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 9px solid #a8a89f;
+  }
+  .chart-container {
+    position: relative;
+    width: 100%;
+    height: 280px;
+  }
+
+  /* ── Prediction table highlight ── */
+  tr.highlight-row td {
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .avg-val {
+    font-weight: 500;
+    color: var(--sage);
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 32px 20px 0;
+    font-size: 12px;
+    color: var(--ink-faint);
+    line-height: 1.8;
+  }
+  .footer span { display: block; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <span class="header-icon">🌱</span>
+  <h1>小满的生长档案</h1>
+  <p class="header-sub">胎儿体重估算 · 双公式对照</p>
+</header>
+
+<main class="container">
+
+  <!-- 公式说明 -->
+  <div class="section-label">公式说明</div>
+  <div class="formula-grid">
+    <div class="formula-card hadlock">
+      <div class="formula-name"><span class="dot-sage"></span>Hadlock II（1985）</div>
+      <div class="formula-body">
         log₁₀(EFW) =<br>
-        &nbsp;&nbsp;1.3596<br>
-        &nbsp;&nbsp;+ 0.0064 × HC<br>
-        &nbsp;&nbsp;+ 0.0425 × AC<br>
-        &nbsp;&nbsp;+ 0.174 &nbsp;× FL<br>
-        &nbsp;&nbsp;− 0.00386 × AC × FL<br>
-        &nbsp;&nbsp;+ 0.00061 × BPD × AC<br>
+        &nbsp; 1.3596<br>
+        &nbsp; + 0.0064 × HC<br>
+        &nbsp; + 0.0425 × AC<br>
+        &nbsp; + 0.174 &nbsp;× FL<br>
+        &nbsp; − 0.00386 × AC × FL<br>
+        &nbsp; + 0.00061 × BPD × AC<br>
         EFW = 10^(上式)
       </div>
+      <p class="formula-note">来源：Hadlock et al., Radiology 1985<br>误差约 ±7.5%</p>
     </div>
-    <div>
-      <div style="font-size:12px;font-weight:500;margin-bottom:6px;"><span class="dot" style="background:#D85A30;"></span>临床经验公式</div>
-      <div class="formula-box">
+    <div class="formula-card clinical">
+      <div class="formula-name"><span class="dot-blush"></span>临床经验公式</div>
+      <div class="formula-body">
         EFW =<br>
-        &nbsp;&nbsp;1.07 × BPD³<br>
-        &nbsp;&nbsp;+ 0.3 × AC² × FL
+        &nbsp; 1.07 × BPD³<br>
+        &nbsp; + 0.3 × AC² × FL
       </div>
-      <div style="margin-top:8px;font-size:12px;color:var(--color-text-secondary);">径线单位均为 cm，EFW 单位 g<br>BPD 双顶径 · HC 头围 · AC 腹围 · FL 股骨长</div>
+      <p class="formula-note" style="margin-top:52px;">
+        BPD 双顶径 &nbsp;·&nbsp; HC 头围<br>
+        AC 腹围 &nbsp;·&nbsp; FL 股骨长<br>
+        径线单位：cm &nbsp;·&nbsp; EFW 单位：g
+      </p>
     </div>
   </div>
-</div>
 
-<div class="card">
-  <p class="section-title">实测数据</p>
-  <table>
-    <thead>
-      <tr><th>孕周</th><th>BPD (mm)</th><th>HC (mm)</th><th>AC (mm)</th><th>FL (mm)</th><th><span class="badge badge-blue">Hadlock II</span></th><th><span class="badge badge-coral">新公式</span></th></tr>
-    </thead>
-    <tbody>
-      <tr><td>28+0</td><td>73</td><td>265</td><td>241</td><td>53</td><td>1,230 g</td><td>1,340 g</td></tr>
-      <tr><td>32+1</td><td>85</td><td>307</td><td>287</td><td>64</td><td>2,134 g</td><td>2,239 g</td></tr>
-      <tr style="color:var(--color-text-tertiary);"><td>32+3 <span style="font-size:11px;">⚠ 已剔除</span></td><td>86</td><td>313</td><td>300</td><td>64</td><td style="text-decoration:line-through;">2,316 g</td><td style="text-decoration:line-through;">2,409 g</td></tr>
-      <tr><td>35+1</td><td>89</td><td>322</td><td>315</td><td>67</td><td>2,670 g</td><td>2,749 g</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:12px;color:var(--color-text-tertiary);margin:8px 0 0;">32+3 残差异常（+123 g），已从回归中剔除</p>
-</div>
+  <!-- 实测数据 -->
+  <div class="section-label">超声实测数据</div>
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>孕周</th>
+            <th>BPD</th>
+            <th>HC</th>
+            <th>AC</th>
+            <th>FL</th>
+            <th><span class="badge-sage">Hadlock II</span></th>
+            <th><span class="badge-blush">新公式</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>28+0</td><td>73 mm</td><td>265 mm</td><td>241 mm</td><td>53 mm</td>
+            <td class="efw-val">1,230 g</td><td class="efw-val">1,340 g</td>
+          </tr>
+          <tr>
+            <td>32+1</td><td>85 mm</td><td>307 mm</td><td>287 mm</td><td>64 mm</td>
+            <td class="efw-val">2,134 g</td><td class="efw-val">2,239 g</td>
+          </tr>
+          <tr class="excluded">
+            <td>32+3<span class="excluded-badge">已剔除</span></td>
+            <td>86 mm</td><td>313 mm</td><td>300 mm</td><td>64 mm</td>
+            <td class="efw-val">2,316 g</td><td class="efw-val">2,409 g</td>
+          </tr>
+          <tr>
+            <td>35+1</td><td>89 mm</td><td>322 mm</td><td>315 mm</td><td>67 mm</td>
+            <td class="efw-val">2,670 g</td><td class="efw-val">2,749 g</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">⚠ 32+3 数据点残差异常（+123 g），已从回归中剔除</p>
+  </div>
 
-<div class="card">
-  <p class="section-title">生长曲线与预测</p>
-  <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:12px;">
-    <div class="legend-item"><span style="width:24px;height:2px;background:#378ADD;display:inline-block;border-radius:1px;"></span>Hadlock 实测</div>
-    <div class="legend-item"><span style="width:24px;height:0;border-top:2px dashed #378ADD;display:inline-block;"></span>Hadlock 预测</div>
-    <div class="legend-item"><span style="width:24px;height:2px;background:#D85A30;display:inline-block;border-radius:1px;"></span>新公式 实测</div>
-    <div class="legend-item"><span style="width:24px;height:0;border-top:2px dashed #D85A30;display:inline-block;"></span>新公式 预测</div>
-    <div class="legend-item">
-      <svg width="12" height="12" viewBox="0 0 12 12"><polygon points="6,1 11,11 1,11" fill="none" stroke="#888780" stroke-width="1.5"/></svg>
-      已剔除（32+3）
+  <!-- 生长曲线 -->
+  <div class="section-label">生长曲线与预测</div>
+  <div class="card">
+    <div class="chart-legend">
+      <div class="legend-item"><span class="legend-line" style="background:#7a9e87;"></span>Hadlock 实测</div>
+      <div class="legend-item"><span class="legend-dashed" style="border-color:#7a9e87;"></span>Hadlock 预测</div>
+      <div class="legend-item"><span class="legend-line" style="background:#e8b4a0;"></span>新公式 实测</div>
+      <div class="legend-item"><span class="legend-dashed" style="border-color:#e8b4a0;"></span>新公式 预测</div>
+      <div class="legend-item"><span class="legend-tri"></span>已剔除（32+3）</div>
+    </div>
+    <div class="chart-container">
+      <canvas id="chart" role="img" aria-label="小满胎儿体重生长曲线，28至40周">
+        实测：28周1230g，32周2134g，35周2670g。预测40周：Hadlock 3682g，新公式 3745g。
+      </canvas>
     </div>
   </div>
-  <div style="position:relative;width:100%;height:320px;">
-    <canvas id="growthChart" role="img" aria-label="胎儿体重生长曲线，28至40周，含剔除点">实测：28周1230g，32周2134g，35周2670g。剔除点：32+3周2316g(Hadlock)、2409g(新公式)。预测40周：Hadlock 3682g，新公式 3745g。</canvas>
-  </div>
-</div>
 
-<div class="card">
-  <p class="section-title">回归方程与36–40周预测</p>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
-    <div class="formula-box"><span class="dot" style="background:#378ADD;"></span>Hadlock: 体重 = 202.76 × 孕周 − 4428.0</div>
-    <div class="formula-box"><span class="dot" style="background:#D85A30;"></span>新公式:&nbsp;&nbsp;体重 = 198.55 × 孕周 − 4196.9</div>
+  <!-- 回归方程与预测 -->
+  <div class="section-label">线性回归预测</div>
+  <div class="card">
+    <div class="regression-grid">
+      <div class="regression-pill">
+        <span style="color:var(--sage);font-weight:500;">Hadlock II</span><br>
+        体重 = 202.76 × 孕周<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; − 4428.0
+      </div>
+      <div class="regression-pill">
+        <span style="color:#c47a60;font-weight:500;">新公式</span><br>
+        体重 = 198.55 × 孕周<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; − 4196.9
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>孕周</th>
+            <th><span class="badge-sage">Hadlock II</span></th>
+            <th><span class="badge-blush">新公式</span></th>
+            <th>均值</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>36周</td><td>2,871 g</td><td>2,951 g</td><td>2,911 g</td></tr>
+          <tr><td>37周</td><td>3,074 g</td><td>3,149 g</td><td>3,112 g</td></tr>
+          <tr><td>38周</td><td>3,277 g</td><td>3,348 g</td><td>3,313 g</td></tr>
+          <tr><td>39周</td><td>3,480 g</td><td>3,547 g</td><td>3,514 g</td></tr>
+          <tr class="highlight-row">
+            <td>40周</td>
+            <td>3,682 g</td>
+            <td>3,745 g</td>
+            <td><span class="avg-val">3,714 g</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">每周增长约 199–203 g &nbsp;·&nbsp; 预测误差约 ±10%</p>
   </div>
-  <table>
-    <thead>
-      <tr><th>孕周</th><th><span class="badge badge-blue">Hadlock II</span></th><th><span class="badge badge-coral">新公式</span></th><th>均值</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>36周</td><td>2,871 g</td><td>2,951 g</td><td>2,911 g</td></tr>
-      <tr><td>37周</td><td>3,074 g</td><td>3,149 g</td><td>3,112 g</td></tr>
-      <tr><td>38周</td><td>3,277 g</td><td>3,348 g</td><td>3,313 g</td></tr>
-      <tr><td>39周</td><td>3,480 g</td><td>3,547 g</td><td>3,514 g</td></tr>
-      <tr style="font-weight:500;"><td>40周</td><td>3,682 g</td><td>3,745 g</td><td>3,714 g</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:12px;color:var(--color-text-tertiary);margin:8px 0 0;">每周增长约 199–203 g；实际误差约 ±10%</p>
-</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+</main>
+
+<footer class="footer">
+  <span>以上数据基于超声估重公式计算，仅供参考</span>
+  <span>实际体重请以产检医生诊断为准</span>
+  <span style="margin-top:8px;color:var(--sage);">🌿 小满，加油 ♡</span>
+</footer>
+
 <script>
-const actualWeeks = [28.00, 32.14, 35.14];
-const hadlockActual = [1230, 2134, 2670];
-const newActual = [1340, 2239, 2749];
-const predWeeks = [35.14, 36, 37, 38, 39, 40];
-const hadlockPred = predWeeks.map(w => Math.round(202.76*w - 4428.0));
-const newPred = predWeeks.map(w => Math.round(198.55*w - 4196.9));
+const actualWeeks  = [28.00, 32.14, 35.14];
+const hadlockReal  = [1230, 2134, 2670];
+const newReal      = [1340, 2239, 2749];
+const predWeeks    = [35.14, 36, 37, 38, 39, 40];
+const hadlockPred  = predWeeks.map(w => Math.round(202.76*w - 4428.0));
+const newPred      = predWeeks.map(w => Math.round(198.55*w - 4196.9));
 
-new Chart(document.getElementById('growthChart'), {
+new Chart(document.getElementById('chart'), {
   type: 'line',
   data: {
     datasets: [
       {
         label: 'Hadlock 实测',
-        data: actualWeeks.map((w,i) => ({x:w, y:hadlockActual[i]})),
-        borderColor: '#378ADD', backgroundColor: '#378ADD',
-        borderWidth: 2, pointRadius: 5, pointHoverRadius: 7, tension: 0.3,
+        data: actualWeeks.map((w,i) => ({x:w, y:hadlockReal[i]})),
+        borderColor: '#7a9e87', backgroundColor: '#7a9e87',
+        borderWidth: 2, pointRadius: 5, pointHoverRadius: 7, tension: 0.35,
       },
       {
         label: 'Hadlock 预测',
         data: predWeeks.map((w,i) => ({x:w, y:hadlockPred[i]})),
-        borderColor: '#378ADD', backgroundColor: 'transparent',
+        borderColor: '#7a9e87', backgroundColor: 'transparent',
         borderWidth: 2, borderDash: [6,4],
-        pointRadius: predWeeks.map(w => w===35.14?0:4), tension: 0.3,
+        pointRadius: predWeeks.map(w => w===35.14 ? 0 : 4), tension: 0.35,
       },
       {
         label: '新公式 实测',
-        data: actualWeeks.map((w,i) => ({x:w, y:newActual[i]})),
-        borderColor: '#D85A30', backgroundColor: '#D85A30',
-        borderWidth: 2, pointRadius: 5, pointHoverRadius: 7, tension: 0.3,
+        data: actualWeeks.map((w,i) => ({x:w, y:newReal[i]})),
+        borderColor: '#e8b4a0', backgroundColor: '#e8b4a0',
+        borderWidth: 2, pointRadius: 5, pointHoverRadius: 7, tension: 0.35,
       },
       {
         label: '新公式 预测',
         data: predWeeks.map((w,i) => ({x:w, y:newPred[i]})),
-        borderColor: '#D85A30', backgroundColor: 'transparent',
+        borderColor: '#e8b4a0', backgroundColor: 'transparent',
         borderWidth: 2, borderDash: [6,4],
-        pointRadius: predWeeks.map(w => w===35.14?0:4), tension: 0.3,
+        pointRadius: predWeeks.map(w => w===35.14 ? 0 : 4), tension: 0.35,
       },
       {
         label: '已剔除 Hadlock',
-        data: [{x: 32.43, y: 2316}],
-        borderColor: '#888780', backgroundColor: 'transparent',
-        borderWidth: 1.5, showLine: false,
-        pointRadius: 7, pointHoverRadius: 8,
-        pointStyle: 'triangle', pointRotation: 0,
-        pointBorderColor: '#888780', pointBorderWidth: 1.5,
+        data: [{x:32.43, y:2316}],
+        borderColor: '#a8a89f', backgroundColor: 'transparent',
+        showLine: false, pointRadius: 7, pointHoverRadius: 9,
+        pointStyle: 'triangle', pointBorderColor: '#a8a89f', pointBorderWidth: 1.5,
       },
       {
         label: '已剔除 新公式',
-        data: [{x: 32.43, y: 2409}],
-        borderColor: '#888780', backgroundColor: 'transparent',
-        borderWidth: 1.5, showLine: false,
-        pointRadius: 7, pointHoverRadius: 8,
-        pointStyle: 'triangle', pointRotation: 0,
-        pointBorderColor: '#888780', pointBorderWidth: 1.5,
+        data: [{x:32.43, y:2409}],
+        borderColor: '#a8a89f', backgroundColor: 'transparent',
+        showLine: false, pointRadius: 7, pointHoverRadius: 9,
+        pointStyle: 'triangle', pointBorderColor: '#a8a89f', pointBorderWidth: 1.5,
       },
     ]
   },
   options: {
-    responsive: true, maintainAspectRatio: false,
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
       tooltip: {
+        backgroundColor: '#2d2d2a',
+        titleColor: '#faf8f3',
+        bodyColor: '#d4d4cc',
+        padding: 10,
+        cornerRadius: 8,
         callbacks: {
           title: items => `孕 ${items[0].parsed.x} 周`,
-          label: item => `${item.dataset.label}: ${item.parsed.y.toLocaleString()} g`
+          label: item => ` ${item.dataset.label}: ${item.parsed.y.toLocaleString()} g`
         }
       }
     },
     scales: {
       x: {
         type: 'linear', min: 27, max: 41,
-        ticks: { stepSize:1, callback: v => Number.isInteger(v)?`${v}周`:'', color:'#888780', font:{size:11} },
-        grid: { color:'rgba(136,135,128,0.15)' }
+        ticks: {
+          stepSize: 1,
+          callback: v => Number.isInteger(v) ? `${v}w` : '',
+          color: '#a8a89f', font: { size: 11 }
+        },
+        grid: { color: 'rgba(45,45,42,0.06)' },
+        border: { color: 'rgba(45,45,42,0.1)' }
       },
       y: {
         min: 800, max: 4200,
-        ticks: { callback: v=>`${(v/1000).toFixed(1)}kg`, color:'#888780', font:{size:11} },
-        grid: { color:'rgba(136,135,128,0.15)' }
+        ticks: {
+          callback: v => `${(v/1000).toFixed(1)}kg`,
+          color: '#a8a89f', font: { size: 11 }
+        },
+        grid: { color: 'rgba(45,45,42,0.06)' },
+        border: { color: 'rgba(45,45,42,0.1)' }
       }
     }
   }
 });
 </script>
+</body>
+</html>
