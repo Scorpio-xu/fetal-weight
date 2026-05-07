@@ -420,13 +420,13 @@
     <div class="regression-grid">
       <div class="regression-pill">
         <span style="color:var(--sage);font-weight:500;">Hadlock II</span><br>
-        体重 = 196.17 × 孕周<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; − 4226.3
+        体重 = 197.11 × 孕周<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; − 4258.1
       </div>
       <div class="regression-pill">
         <span style="color:#c47a60;font-weight:500;">新公式</span><br>
-        体重 = 195.54 × 孕周<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; − 4110.5
+        体重 = 194.08 × 孕周<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; − 4062.4
       </div>
     </div>
     <div class="table-wrap">
@@ -440,19 +440,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td>37周</td><td>3,032 g</td><td>3,124 g</td><td>3,078 g</td></tr>
-          <tr><td>38周</td><td>3,228 g</td><td>3,320 g</td><td>3,274 g</td></tr>
-          <tr><td>39周</td><td>3,424 g</td><td>3,516 g</td><td>3,470 g</td></tr>
+          <tr><td>37周</td><td>3,035 g</td><td>3,119 g</td><td>3,077 g</td></tr>
+          <tr><td>38周</td><td>3,232 g</td><td>3,313 g</td><td>3,272 g</td></tr>
+          <tr><td>39周</td><td>3,429 g</td><td>3,507 g</td><td>3,468 g</td></tr>
           <tr class="highlight-row">
             <td>40周</td>
-            <td>3,621 g</td>
-            <td>3,711 g</td>
-            <td><span class="avg-val">3,666 g</span></td>
+            <td>3,626 g</td>
+            <td>3,701 g</td>
+            <td><span class="avg-val">3,664 g</span></td>
           </tr>
         </tbody>
       </table>
     </div>
-    <p class="table-note">每周增长约 195–196 g &nbsp;·&nbsp; 预测误差约 ±10%</p>
+    <p class="table-note">每周增长约 194–197 g &nbsp;·&nbsp; 预测误差约 ±10%</p>
   </div>
 
 </main>
@@ -468,8 +468,8 @@ const actualWeeks  = [28.00, 32.14, 35.14, 36.86];
 const hadlockReal  = [1230, 2134, 2670, 2979];
 const newReal      = [1340, 2239, 2749, 3069];
 const predWeeks    = [36.86, 37, 38, 39, 40];
-const hadlockPred  = predWeeks.map(w => Math.round(196.17*w - 4226.3));
-const newPred      = predWeeks.map(w => Math.round(195.54*w - 4110.5));
+const hadlockPred  = predWeeks.map(w => Math.round(197.11*w - 4258.1));
+const newPred      = predWeeks.map(w => Math.round(194.08*w - 4062.4));
 
 new Chart(document.getElementById('chart'), {
   type: 'line',
