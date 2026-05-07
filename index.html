@@ -366,7 +366,7 @@
             <th>AC</th>
             <th>FL</th>
             <th><span class="badge-sage">Hadlock II</span></th>
-            <th><span class="badge-blush">新公式</span></th>
+            <th><span class="badge-blush">临床经验公式</span></th>
           </tr>
         </thead>
         <tbody>
@@ -403,13 +403,13 @@
     <div class="chart-legend">
       <div class="legend-item"><span class="legend-line" style="background:#7a9e87;"></span>Hadlock 实测</div>
       <div class="legend-item"><span class="legend-dashed" style="border-color:#7a9e87;"></span>Hadlock 预测</div>
-      <div class="legend-item"><span class="legend-line" style="background:#e8b4a0;"></span>新公式 实测</div>
-      <div class="legend-item"><span class="legend-dashed" style="border-color:#e8b4a0;"></span>新公式 预测</div>
+      <div class="legend-item"><span class="legend-line" style="background:#e8b4a0;"></span>临床经验公式 实测</div>
+      <div class="legend-item"><span class="legend-dashed" style="border-color:#e8b4a0;"></span>临床经验公式 预测</div>
       <div class="legend-item"><span class="legend-tri"></span>已剔除（32+3）</div>
     </div>
     <div class="chart-container">
       <canvas id="chart" role="img" aria-label="小满胎儿体重生长曲线，28至40周">
-        实测：28周1230g，32周2134g，35周2670g，36+6周2979g。预测40周：Hadlock 3621g，新公式 3711g。
+        实测：28周1230g，32周2134g，35周2670g，36+6周2979g。预测40周：Hadlock 3621g，临床经验公式 3711g。
       </canvas>
     </div>
   </div>
@@ -424,7 +424,7 @@
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; − 4258.1
       </div>
       <div class="regression-pill">
-        <span style="color:#c47a60;font-weight:500;">新公式</span><br>
+        <span style="color:#c47a60;font-weight:500;">临床经验公式</span><br>
         体重 = 194.08 × 孕周<br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; − 4062.4
       </div>
@@ -435,7 +435,7 @@
           <tr>
             <th>孕周</th>
             <th><span class="badge-sage">Hadlock II</span></th>
-            <th><span class="badge-blush">新公式</span></th>
+            <th><span class="badge-blush">临床经验公式</span></th>
             <th>均值</th>
           </tr>
         </thead>
@@ -489,13 +489,13 @@ new Chart(document.getElementById('chart'), {
         pointRadius: predWeeks.map(w => w===36.86 ? 0 : 4), tension: 0.35,
       },
       {
-        label: '新公式 实测',
+        label: '临床经验公式 实测',
         data: actualWeeks.map((w,i) => ({x:w, y:newReal[i]})),
         borderColor: '#e8b4a0', backgroundColor: '#e8b4a0',
         borderWidth: 2, pointRadius: 5, pointHoverRadius: 7, tension: 0.35,
       },
       {
-        label: '新公式 预测',
+        label: '临床经验公式 预测',
         data: predWeeks.map((w,i) => ({x:w, y:newPred[i]})),
         borderColor: '#e8b4a0', backgroundColor: 'transparent',
         borderWidth: 2, borderDash: [6,4],
@@ -509,7 +509,7 @@ new Chart(document.getElementById('chart'), {
         pointStyle: 'triangle', pointBorderColor: '#a8a89f', pointBorderWidth: 1.5,
       },
       {
-        label: '已剔除 新公式',
+        label: '已剔除 临床经验公式',
         data: [{x:32.43, y:2409}],
         borderColor: '#a8a89f', backgroundColor: 'transparent',
         showLine: false, pointRadius: 7, pointHoverRadius: 9,
