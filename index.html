@@ -387,6 +387,10 @@
             <td>35+1</td><td>89 mm</td><td>322 mm</td><td>315 mm</td><td>67 mm</td>
             <td class="efw-val">2,670 g</td><td class="efw-val">2,749 g</td>
           </tr>
+          <tr>
+            <td>36+6</td><td>93 mm</td><td>328 mm</td><td>329 mm</td><td>68 mm</td>
+            <td class="efw-val">2,979 g</td><td class="efw-val">3,069 g</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -405,7 +409,7 @@
     </div>
     <div class="chart-container">
       <canvas id="chart" role="img" aria-label="小满胎儿体重生长曲线，28至40周">
-        实测：28周1230g，32周2134g，35周2670g。预测40周：Hadlock 3682g，新公式 3745g。
+        实测：28周1230g，32周2134g，35周2670g，36+6周2979g。预测40周：Hadlock 3621g，新公式 3711g。
       </canvas>
     </div>
   </div>
@@ -416,13 +420,13 @@
     <div class="regression-grid">
       <div class="regression-pill">
         <span style="color:var(--sage);font-weight:500;">Hadlock II</span><br>
-        体重 = 202.76 × 孕周<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; − 4428.0
+        体重 = 196.17 × 孕周<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; − 4226.3
       </div>
       <div class="regression-pill">
         <span style="color:#c47a60;font-weight:500;">新公式</span><br>
-        体重 = 198.55 × 孕周<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; − 4196.9
+        体重 = 195.54 × 孕周<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; − 4110.5
       </div>
     </div>
     <div class="table-wrap">
@@ -436,20 +440,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td>36周</td><td>2,871 g</td><td>2,951 g</td><td>2,911 g</td></tr>
-          <tr><td>37周</td><td>3,074 g</td><td>3,149 g</td><td>3,112 g</td></tr>
-          <tr><td>38周</td><td>3,277 g</td><td>3,348 g</td><td>3,313 g</td></tr>
-          <tr><td>39周</td><td>3,480 g</td><td>3,547 g</td><td>3,514 g</td></tr>
+          <tr><td>37周</td><td>3,032 g</td><td>3,124 g</td><td>3,078 g</td></tr>
+          <tr><td>38周</td><td>3,228 g</td><td>3,320 g</td><td>3,274 g</td></tr>
+          <tr><td>39周</td><td>3,424 g</td><td>3,516 g</td><td>3,470 g</td></tr>
           <tr class="highlight-row">
             <td>40周</td>
-            <td>3,682 g</td>
-            <td>3,745 g</td>
-            <td><span class="avg-val">3,714 g</span></td>
+            <td>3,621 g</td>
+            <td>3,711 g</td>
+            <td><span class="avg-val">3,666 g</span></td>
           </tr>
         </tbody>
       </table>
     </div>
-    <p class="table-note">每周增长约 199–203 g &nbsp;·&nbsp; 预测误差约 ±10%</p>
+    <p class="table-note">每周增长约 195–196 g &nbsp;·&nbsp; 预测误差约 ±10%</p>
   </div>
 
 </main>
@@ -461,12 +464,12 @@
 </footer>
 
 <script>
-const actualWeeks  = [28.00, 32.14, 35.14];
-const hadlockReal  = [1230, 2134, 2670];
-const newReal      = [1340, 2239, 2749];
-const predWeeks    = [35.14, 36, 37, 38, 39, 40];
-const hadlockPred  = predWeeks.map(w => Math.round(202.76*w - 4428.0));
-const newPred      = predWeeks.map(w => Math.round(198.55*w - 4196.9));
+const actualWeeks  = [28.00, 32.14, 35.14, 36.86];
+const hadlockReal  = [1230, 2134, 2670, 2979];
+const newReal      = [1340, 2239, 2749, 3069];
+const predWeeks    = [36.86, 37, 38, 39, 40];
+const hadlockPred  = predWeeks.map(w => Math.round(196.17*w - 4226.3));
+const newPred      = predWeeks.map(w => Math.round(195.54*w - 4110.5));
 
 new Chart(document.getElementById('chart'), {
   type: 'line',
@@ -483,7 +486,7 @@ new Chart(document.getElementById('chart'), {
         data: predWeeks.map((w,i) => ({x:w, y:hadlockPred[i]})),
         borderColor: '#7a9e87', backgroundColor: 'transparent',
         borderWidth: 2, borderDash: [6,4],
-        pointRadius: predWeeks.map(w => w===35.14 ? 0 : 4), tension: 0.35,
+        pointRadius: predWeeks.map(w => w===36.86 ? 0 : 4), tension: 0.35,
       },
       {
         label: '新公式 实测',
@@ -496,7 +499,7 @@ new Chart(document.getElementById('chart'), {
         data: predWeeks.map((w,i) => ({x:w, y:newPred[i]})),
         borderColor: '#e8b4a0', backgroundColor: 'transparent',
         borderWidth: 2, borderDash: [6,4],
-        pointRadius: predWeeks.map(w => w===35.14 ? 0 : 4), tension: 0.35,
+        pointRadius: predWeeks.map(w => w===36.86 ? 0 : 4), tension: 0.35,
       },
       {
         label: '已剔除 Hadlock',
